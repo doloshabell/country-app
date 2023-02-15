@@ -43,13 +43,30 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
-        viewModel.refresh();
+        setViewModel();
 
-        countriesList.setLayoutManager(new LinearLayoutManager(this));
-        countriesList.setAdapter(adapter);
+        setAdapter();
+
+        setRefreshLayout();
 
         observerViewModel();
+    }
+
+    private void setViewModel() {
+        viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
+        viewModel.refresh();
+    }
+
+    private void setAdapter() {
+        countriesList.setLayoutManager(new LinearLayoutManager(this));
+        countriesList.setAdapter(adapter);
+    }
+
+    private void setRefreshLayout() {
+        refreshLayout.setOnRefreshListener(() -> {
+            viewModel.refresh();
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     private void observerViewModel() {
